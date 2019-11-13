@@ -1,5 +1,6 @@
-#! /usr/bin/gawk
-# 01_Conductor.awk
+#! /usr/bin/gawk -f
+# 01_ExplorerSheetName_SubSystem_01.awk
+# gawk.exe -f AWKScripts/01_UPDATE/03_SubSystem/01_ExplorerSheetName_SubSystem_01.awk -v Dir=Dir
 
 # ------------------------------------------------------------------------------------------------------------------------
 
@@ -26,36 +27,17 @@
 
 # ------------------------------------------------------------------------------------------------------------------------
 
-@include "AWKScripts/01_UPDATE/02_CommonParts/01_Konzertouverture.awk";
-@include "AWKScripts/01_UPDATE/02_CommonParts/02_Allegro.awk";
-@include "AWKScripts/01_UPDATE/02_CommonParts/03_TelecommunicationControl.awk";
-@include "AWKScripts/01_UPDATE/02_CommonParts/04_FileUtils.awk";
-@include "AWKScripts/01_UPDATE/02_CommonParts/05_AssaiVivace.awk";
-@include "AWKScripts/01_UPDATE/02_CommonParts/06_AdagioSostenuto.awk";
-@include "AWKScripts/01_UPDATE/02_CommonParts/07_Introduzione.awk";
-@include "AWKScripts/01_UPDATE/02_CommonParts/08_Largo.awk";
-
-# ------------------------------------------------------------------------------------------------------------------------
-
 BEGIN{
-	print "START Hammerklavier_Initialize...";
-	Hammerklavier_Initialize();
-	print "END Hammerklavier_Initialize.";
-	print "START Allegro...";
-	Allegro();
-	print "END Allegro.";
-	print "START AssaiVivace...";
-	AssaiVivace();
-	print "END AssaiVivace.";
-	print "START AdagioSostenuto...";
-	AdagioSostenuto();
-	print "END AdagioSostenuto.";
-	print "START Introduzione...";
-	Conductor_XLSX = Introduzione();
-	print "END Introduzione.";
-	print "START Largo...";
-	Largo(Conductor_XLSX);
-	print "END Largo.";
+	cnt = 1;
+}
 
+{
+	gsub("<sheet name=","");
+	gsub("sheetId.*?","");
+	gsub("\"","");
+	print "sheet"cnt","substr($0,1,length($0) - 1)","Dir"/sheet"cnt".xml";
+	print "sheet"cnt","substr($0,1,length($0) - 1)","Dir"/ConvertedSJIS_sheet"cnt".xml";
+	print "sheet"cnt","substr($0,1,length($0) - 1)","Dir"/InsertedCRLF_sheet"cnt".xml";
+	cnt++;
 }
 

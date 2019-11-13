@@ -1,5 +1,5 @@
 #! /usr/bin/gawk
-# 05_AssaiVivace.awk
+# 06_AdagioSostenuto.awk
 
 # ------------------------------------------------------------------------------------------------------------------------
 
@@ -26,109 +26,127 @@
 
 # ------------------------------------------------------------------------------------------------------------------------
 
-function AssaiVivace(){
-	# 本日分のAcquiredHTML_SJIS/未返納教員免許状一覧_文部科学省_YYYYMMDD.txtの存在確認
+function AdagioSostenuto(){
+	# 本日分のEditedHTML/未返納教員免許状一覧_文部科学省_YYYYMMDD.txtの存在確認
 	# 前日以前のものに対するHTMLの確認は、行っても意味がない。
 	# そのため、最後にXLSXとCSVのハッシュ照合を取り、XLSXがハッシュ表と食い違う場合はその日付の生成物6種（ハッシュ表、HTML3種、XLSX、CSV）を削除する。
 	# XLSXがハッシュ表と一致しCSVが不一致となった場合は、CSVを作成し直す。
 	# 各日付における重複確認は、後々にまとめてハッシュ表をソートし日付で降順ソートして、重複対象を出力し、対象を削除していく。
-	print FNAME_SJIS"が存在するか確認します・・・" > "con";
+	print FNAME_EDIT"が存在するか確認します・・・" > "con";
 	close("con");
-	cmd = CALL_BUSYBOX" ls \""FNAME_SJIS"\" > "OUT_DEVNULL;
+	cmd = CALL_BUSYBOX" ls \""FNAME_EDIT"\" > "OUT_DEVNULL;
 	ret = RetExecCmd(cmd);
-	# 文字コード変換により存在していない場合、文字コード変換を行う
+	# 編集処理により存在していない場合、編集処理を行う
 	if(ret == 1){
-		AssaiVivace_Sub00();
+		AdagioSostenuto_Sub00();
 		return 0;
 	}
 	# 現在のハッシュリストを確認する
-	print FNAME_SJIS"は文字コード変換済です。" > "con";
-	print FNAME_HASH"に"FNAME_SJIS"の記載があるかを確認します・・・" > "con";
+	print FNAME_EDIT"は編集済です。" > "con";
+	print FNAME_HASH"に"FNAME_EDIT"の記載があるかを確認します・・・" > "con";
 	close("con");
 	delete HashTable;
 	GetHashTable();
 	BitField01 = 0;
 	BitField02 = 0;
+	BitField03 = 0;
 	len = length(HashTable);
-	if(len == 1){
-		AssaiVivace_Sub00();
+	if(len == 2){
+		AdagioSostenuto_Sub00();
 		return 0;
 	}
 	UTF8Line = "";
+	SJISLine = "";
 	for(i in HashTable){
 		split(HashTable[i],HashTableLine,",");
-		if(HashTableLine[1] == FNAME_SJIS){
+		if(HashTableLine[1] == FNAME_EDIT){
 			BitField01 = 1;
+		}
+		if(HashTableLine[1] == FNAME_SJIS){
+			SJISLine = HashTableLine[1];
+			BitField02 = 1;
 		}
 		if(HashTableLine[1] == FNAME_UTF8){
 			UTF8Line = HashTableLine[1];
-			BitField02 = 1;
+			BitField03 = 1;
 		}
-		if(BitField01 == 1 && BitField02 == 1){
+		if(BitField01 == 1 && BitField02 == 1 && BitField03 == 1){
 			break;
 		}
 		delete HashTableLine;
 	}
 	if(BitField01 == 0){
-		AssaiVivace_Sub00();
+		AdagioSostenuto_Sub00();
 		return 0;
 	}
-	print FNAME_HASH"に"FNAME_SJIS"の記載を確認しました。" > "con";
+	print FNAME_HASH"に"FNAME_EDIT"の記載を確認しました。" > "con";
 	print FNAME_HASH"のハッシュ値が一致するかを確認します。" > "con";
 	close("con");
-	CompareHash = AssaiVivace_Sub02();
+	CompareHash = AdagioSostenuto_Sub02();
 	
 	if(HashTableLine[2] != CompareHash){
 		print FNAME_HASH"のハッシュ値が不一致でした。" > "con";
 		print "文字コードの再変換を行います。" > "con";
 		close("con");
-		AssaiVivace_Sub00();
+		AdagioSostenuto_Sub00();
 		return 0;
 	}
 	print FNAME_HASH"のハッシュ値が一致しました。" > "con";
-	print FNAME_SJIS"の確認を終了します。" > "con";
+	print FNAME_EDIT"の確認を終了します。" > "con";
 	close("con");
 	delete HashTableLine;
 }
 
 # ------------------------------------------------------------------------------------------------------------------------
 
-function AssaiVivace_Sub01(){
-	print FNAME_UTF8"から"FNAME_SJIS"への文字コード変換を行います・・・" > "con";
+function AdagioSostenuto_Sub01(){
+	print FNAME_SJIS"から"FNAME_EDIT"への編集処理を行います・・・" > "con";
 	close("con");
-	# HTMLで波ダッシュが出現するが、これが後々ややこしいことになる。
-	# iconvやnkfで変換した際の文字コードが「U+301C」になるが、
-	# Windowsでは「U+FF5E」となるため、「U+301C」を持ち込むと、
-	# テキストエディタなどで文字化けと認識されてしまう。
-	# そのため、変換を文字コード変換後にかけている。
-	# https://xhtml.exblog.jp/11578228/
-	# 波ダッシュ問題 : タイトルはいつも後付け
-	cmd1 = CALL_NKF32" -s \""FNAME_UTF8"\" | ";
-	cmd2 = CALL_BUSYBOX" sed \"s/\\xe3\\x80\\x9c/\\xef\\xbd\\x9e/g\" | ";
-	cmd3 = CALL_NKF32" -Lw > \""FNAME_SJIS"\"";
-	cmd = cmd1 cmd2 cmd3;
-	ExecCmd(cmd);
-	print FNAME_UTF8"から"FNAME_SJIS"への文字コード変換が完了しました。" > "con";
+	# AcquiredHTML_ShiftJIS/未返納教員免許状一覧_文部科学省.txtを吸い上げる。
+	cmd = CALL_BUSYBOX" cat "FNAME_SJIS;
+	cnt = 1;
+	while(cmd | getline esc){
+		SJISArrays[cnt] = esc;
+		cnt++;
+	}
+	close(cmd);
+	# SJISArraysの各配列内容からタブ文字を削除する。
+	for(i in SJISArrays){
+		gsub("\t","",SJISArrays[i]);
+	}
+	
+	# SJISArraysの各配列内容から空行を削除する。
+	for(i in SJISArrays){
+		if(SJISArrays[i] != ""){
+			print SJISArrays[i] > FNAME_EDIT;
+		}
+	}
+	delete SJISArrays;
+	
+	# ハッシュ値取得のため、ファイルI/Oストリームを閉じる。
+	close(Fname_EDIT);
+	print FNAME_SJIS"から"FNAME_EDIT"への編集処理が完了しました。" > "con";
 	close("con");
 }
 
 # ------------------------------------------------------------------------------------------------------------------------
 
-function AssaiVivace_Sub02(){
-	print FNAME_SJIS"のハッシュ値を取得します・・・" > "con";
+function AdagioSostenuto_Sub02(){
+	print FNAME_EDIT"のハッシュ値を取得します・・・" > "con";
 	close("con");
-	return GetHashValue(FNAME_SJIS);
+	return GetHashValue(FNAME_EDIT);
 }
 
 # ------------------------------------------------------------------------------------------------------------------------
 
-function AssaiVivace_Sub00(){
-	AssaiVivace_Sub01();
-	RetHash = AssaiVivace_Sub02();
+function AdagioSostenuto_Sub00(){
+	AdagioSostenuto_Sub01();
+	RetHash = AdagioSostenuto_Sub02();
 	# ファイル名、ハッシュ値
 	delete HashTable;
 	GetHashTable();
 	UTF8Line = "";
+	SJISLine = "";
 	for(i in HashTable){
 		split(HashTable[i],HashTableLine,",");
 		if(HashTableLine[1] == FNAME_UTF8){
@@ -138,9 +156,19 @@ function AssaiVivace_Sub00(){
 		}
 		delete HashTableLine;
 	}
+	for(i in HashTable){
+		split(HashTable[i],HashTableLine,",");
+		if(HashTableLine[1] == FNAME_SJIS){
+			SJISLine = HashTable[i];
+			delete HashTableLine;
+			break;
+		}
+		delete HashTableLine;
+	}
 	delete HashTable;
 	print UTF8Line > FNAME_HASH;
-	print FNAME_SJIS","RetHash",," > FNAME_HASH;
+	print SJISLine > FNAME_HASH;
+	print FNAME_EDIT","RetHash",," > FNAME_HASH;
 	close(FNAME_HASH);
 }
 

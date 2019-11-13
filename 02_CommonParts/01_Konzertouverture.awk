@@ -6,8 +6,11 @@
 # Copyright 2019 The LOTLTHNBR Project Authors, GinSanaduki.
 # All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be found in the LICENSE file.
-# LOTLTHNBR Scripts provides a function to obtain a list of non-returned license numbers of teacher licenses from the Ministry of Education, Culture, Sports, Science and Technology from the website of the Ministry of Education, Culture, Sports, Science and Technology, and to inquire by license number.
-# This Scripts needs GAWK(the GNU implementation of the AWK programming language) version 4.0 or later and BusyBox developed by Erik Andersen, Rob Landley, Denys Vlasenko and others.
+# LOTLTHNBR Scripts provides a function to obtain a list of non-returned license numbers of teacher licenses 
+# from the Ministry of Education, Culture, Sports, Science and Technology from the website of the Ministry 
+# of Education, Culture, Sports, Science and Technology, and to inquire by license number.
+# This Scripts needs GAWK(the GNU implementation of the AWK programming language) version 4.0 or later 
+# and BusyBox developed by Erik Andersen, Rob Landley, Denys Vlasenko and others.
 # GAWK 5.0.1 Download ezwinports from SourceForge.net
 # https://sourceforge.net/projects/ezwinports/files/gawk-5.0.1-w32-bin.zip/download
 # BusyBox Official
@@ -44,15 +47,20 @@ function Declaration(){
 	FNAME_EDIT = DIR_HTML_EDIT"/"HTML_FILENAME;
 	FNAME_HASH = DIR_HASHCONF"/HashInfo_"strftime("%Y%m%d",systime())".def";
 	KEYWORD_01 = "返納が必要であるにもかかわらず返納されていない教員免許状一覧";
-	KEYWORD_02 = "<a href=\\\"\\/a_menu\\/shotou\\/kyoin\\/__icsFiles\\/afieldfile\\/2[0-9][0-9][0-9]\\/[0-1][0-9]\\/[0-3][0-9]\\/[0-9]+_[0-9]*\\.xlsx";
+	KEYWORD_02 = "<a href=\\\"\\/a_menu\\/shotou\\/kyoin\\/__icsFiles\\/afieldfile\\/2[0-9][0-9][0-9]\\/[0-1][0-9]\\/[0-3][0-9]\\/.+\\.xlsx";
 	KEYWORD_03 = substr(MEXT_URL,1,21);
+	KEYWORD_04 = "全都道府県";
 	GENE_EXECSHELL = "EXECSHELL.sh";
 	ColSearchWord01 = "授与権者";
 	ColSearchWord02 = "免許番号";
 	ColSearchWord03 = "教科";
 	CALL_BUSYBOX = "LinuxTools\\busybox.exe";
+	CALL_BUSYBOX_GLOB = "LinuxTools\\busybox_glob.exe";
 	CALL_NKF32 = "LinuxTools\\nkf32.exe";
+	CALL_GAWK = "LinuxTools\\gawk.exe";
 	OUT_DEVNULL = "nul 2>&1";
+	EXEC_SHELL = CALL_BUSYBOX" sh \""GENE_EXECSHELL"\"";
+	RM_SHELL = CALL_BUSYBOX" rm \""GENE_EXECSHELL"\" > "OUT_DEVNULL;
 }
 
 # ------------------------------------------------------------------------------------------------------------------------
@@ -94,14 +102,14 @@ function RetTextExecCmd(CMDTEXT){
 # ------------------------------------------------------------------------------------------------------------------------
 
 function MD(DIR_MD){
-	CMD_MD=CALL_BUSYBOX" mkdir -p \""DIR_MD"\" > "OUT_DEVNULL;
+	CMD_MD = CALL_BUSYBOX" mkdir -p \""DIR_MD"\" > "OUT_DEVNULL;
 	ExecCmd(CMD_MD);
 }
 
 # ------------------------------------------------------------------------------------------------------------------------
 
 function RM(DIR_RM){
-	CMD_RM="LinuxTools\\busybox.exe rm -r \""DIR_RM"\" > "OUT_DEVNULL;
+	CMD_RM = CALL_BUSYBOX" rm -r \""DIR_RM"\" > "OUT_DEVNULL;
 	ExecCmd(CMD_RM);
 }
 
@@ -143,6 +151,68 @@ function HASHMAKE(){
 	MDRM(DIR_HTML_EDIT);
 	MDRM(DIR_DEFINECSV);
 	MDRM(DIR_ACQUIREDXLSX);
+}
+
+# ------------------------------------------------------------------------------------------------------------------------
+
+function RepYears(ReplaceTarget){
+	gsub("元","1",ReplaceTarget);
+	gsub("平成1年","1989年",ReplaceTarget);
+	gsub("平成2年","1990年",ReplaceTarget);
+	gsub("平成3年","1991年",ReplaceTarget);
+	gsub("平成4年","1992年",ReplaceTarget);
+	gsub("平成5年","1993年",ReplaceTarget);
+	gsub("平成6年","1994年",ReplaceTarget);
+	gsub("平成7年","1995年",ReplaceTarget);
+	gsub("平成8年","1996年",ReplaceTarget);
+	gsub("平成9年","1997年",ReplaceTarget);
+	gsub("平成10年","1998年",ReplaceTarget);
+	gsub("平成11年","1999年",ReplaceTarget);
+	gsub("平成12年","2000年",ReplaceTarget);
+	gsub("平成13年","2001年",ReplaceTarget);
+	gsub("平成14年","2002年",ReplaceTarget);
+	gsub("平成15年","2003年",ReplaceTarget);
+	gsub("平成16年","2004年",ReplaceTarget);
+	gsub("平成17年","2005年",ReplaceTarget);
+	gsub("平成18年","2006年",ReplaceTarget);
+	gsub("平成19年","2007年",ReplaceTarget);
+	gsub("平成20年","2008年",ReplaceTarget);
+	gsub("平成21年","2009年",ReplaceTarget);
+	gsub("平成22年","2010年",ReplaceTarget);
+	gsub("平成23年","2011年",ReplaceTarget);
+	gsub("平成24年","2012年",ReplaceTarget);
+	gsub("平成25年","2013年",ReplaceTarget);
+	gsub("平成26年","2014年",ReplaceTarget);
+	gsub("平成27年","2015年",ReplaceTarget);
+	gsub("平成28年","2016年",ReplaceTarget);
+	gsub("平成29年","2017年",ReplaceTarget);
+	gsub("平成30年","2018年",ReplaceTarget);
+	gsub("平成31年","2019年",ReplaceTarget);
+	gsub("令和1年","2019年",ReplaceTarget);
+	gsub("令和2年","2020年",ReplaceTarget);
+	gsub("令和3年","2021年",ReplaceTarget);
+	gsub("令和4年","2022年",ReplaceTarget);
+	gsub("令和5年","2023年",ReplaceTarget);
+	gsub("令和6年","2024年",ReplaceTarget);
+	gsub("令和7年","2025年",ReplaceTarget);
+	gsub("令和8年","2026年",ReplaceTarget);
+	gsub("令和9年","2027年",ReplaceTarget);
+	gsub("令和10年","2028年",ReplaceTarget);
+	# 月は大きい部分から変換
+	gsub("12月","12",ReplaceTarget);
+	gsub("11月","11",ReplaceTarget);
+	gsub("10月","10",ReplaceTarget);
+	gsub("9月","09",ReplaceTarget);
+	gsub("8月","08",ReplaceTarget);
+	gsub("7月","07",ReplaceTarget);
+	gsub("6月","06",ReplaceTarget);
+	gsub("5月","05",ReplaceTarget);
+	gsub("4月","04",ReplaceTarget);
+	gsub("3月","03",ReplaceTarget);
+	gsub("2月","02",ReplaceTarget);
+	gsub("1月","01",ReplaceTarget);
+	gsub("年","",ReplaceTarget);
+	return ReplaceTarget;
 }
 
 # ------------------------------------------------------------------------------------------------------------------------

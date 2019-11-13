@@ -1,5 +1,5 @@
 #! /usr/bin/gawk
-# 01_Conductor.awk
+# 08_Largo.awk
 
 # ------------------------------------------------------------------------------------------------------------------------
 
@@ -26,36 +26,21 @@
 
 # ------------------------------------------------------------------------------------------------------------------------
 
-@include "AWKScripts/01_UPDATE/02_CommonParts/01_Konzertouverture.awk";
-@include "AWKScripts/01_UPDATE/02_CommonParts/02_Allegro.awk";
-@include "AWKScripts/01_UPDATE/02_CommonParts/03_TelecommunicationControl.awk";
-@include "AWKScripts/01_UPDATE/02_CommonParts/04_FileUtils.awk";
-@include "AWKScripts/01_UPDATE/02_CommonParts/05_AssaiVivace.awk";
-@include "AWKScripts/01_UPDATE/02_CommonParts/06_AdagioSostenuto.awk";
-@include "AWKScripts/01_UPDATE/02_CommonParts/07_Introduzione.awk";
-@include "AWKScripts/01_UPDATE/02_CommonParts/08_Largo.awk";
-
-# ------------------------------------------------------------------------------------------------------------------------
-
-BEGIN{
-	print "START Hammerklavier_Initialize...";
-	Hammerklavier_Initialize();
-	print "END Hammerklavier_Initialize.";
-	print "START Allegro...";
-	Allegro();
-	print "END Allegro.";
-	print "START AssaiVivace...";
-	AssaiVivace();
-	print "END AssaiVivace.";
-	print "START AdagioSostenuto...";
-	AdagioSostenuto();
-	print "END AdagioSostenuto.";
-	print "START Introduzione...";
-	Conductor_XLSX = Introduzione();
-	print "END Introduzione.";
-	print "START Largo...";
-	Largo(Conductor_XLSX);
-	print "END Largo.";
-
+function Largo(Largo_XLSX){
+	# CSVに関しては、無条件で変換する（XLSX内のファイル内から引きこまなければわからないからだ）
+	# 拡張子を除外
+	len_Largo_XLSX_minus5 = length(Largo_XLSX) - 5;
+	Largo_DirName = substr(Largo_XLSX,1,len_Largo_XLSX_minus5);
+	Largo_FileName = Largo_XLSX;
+	MD(Largo_DirName);
+	Unzip(Largo_FileName,Largo_DirName);
+	UMLCleaner(Largo_DirName);
+	nkfSJIS(Largo_DirName);
+	InsCRLF(Largo_DirName);
+	ExplorerSheetName(Largo_DirName);
+	#ExtractSharedStrings(Largo_DirName);
+	#Extractsheet_ZEN_TODOUFUKEN(Largo_DirName);
+	#OuterJoin(Largo_DirName);
+	#UMLCleaner02(Largo_DirName);
 }
 
