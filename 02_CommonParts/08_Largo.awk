@@ -39,20 +39,23 @@ function Largo(Largo_XLSX){
 	InsCRLF(Largo_DirName);
 	ExplorerSheetName(Largo_DirName);
 	# ExtractSharedStringsとExtractsheet_ZEN_TODOUFUKENを並列実行
-	Largo_CMD01 = ExtractSharedStrings(Largo_DirName);
-	Largo_CMD02 = Extractsheet_ZEN_TODOUFUKEN(Largo_DirName);
-	Largo_Sub01(Largo_CMD01,Largo_CMD02);
+	# Largo_CMD01 = ExtractSharedStrings(Largo_DirName);
+	# Largo_CMD02 = Extractsheet_ZEN_TODOUFUKEN(Largo_DirName);
+	# Largo_Sub01(Largo_CMD01,Largo_CMD02);
+	ExtractSharedStrings(Largo_DirName);
+	Extractsheet_ZEN_TODOUFUKEN(Largo_DirName);
 	OuterJoin(Largo_DirName);
 	UMLCleaner02(Largo_DirName);
 }
 
 # ------------------------------------------------------------------------------------------------------------------------
 
+# むしろshellのI/Oで遅くなったので、やめる
 function Largo_Sub01(Largo_Sub01_CMD01,Largo_Sub01_CMD02){
 	print "#! /bin/sh" > GENE_EXECSHELL;
 	# ashで実行するため、「\」を「/」に置換
-	gsub("\\","/",Largo_Sub01_CMD01);
-	gsub("\\","/",Largo_Sub01_CMD02);
+	gsub("\\\\","/",Largo_Sub01_CMD01);
+	gsub("\\\\","/",Largo_Sub01_CMD02);
 	print Largo_Sub01_CMD01" & " > GENE_EXECSHELL;
 	print Largo_Sub01_CMD02" & " > GENE_EXECSHELL;
 	print "wait" > GENE_EXECSHELL;
