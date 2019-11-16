@@ -50,6 +50,9 @@ function Largo(Largo_XLSX){
 
 function Largo_Sub01(Largo_Sub01_CMD01,Largo_Sub01_CMD02){
 	print "#! /bin/sh" > GENE_EXECSHELL;
+	# ashで実行するため、「\」を「/」に置換
+	gsub("\\","/",Largo_Sub01_CMD01);
+	gsub("\\","/",Largo_Sub01_CMD02);
 	print Largo_Sub01_CMD01" & " > GENE_EXECSHELL;
 	print Largo_Sub01_CMD02" & " > GENE_EXECSHELL;
 	print "wait" > GENE_EXECSHELL;
@@ -57,7 +60,6 @@ function Largo_Sub01(Largo_Sub01_CMD01,Largo_Sub01_CMD02){
 	print "" > GENE_EXECSHELL;
 	close(GENE_EXECSHELL);
 	# 並列処理のため
-	exit
 	ExecCmd(EXEC_SHELL);
 	ExecCmd(RM_SHELL);
 }
