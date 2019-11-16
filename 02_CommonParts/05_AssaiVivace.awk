@@ -76,9 +76,9 @@ function AssaiVivace(){
 	print FNAME_HASH"に"FNAME_SJIS"の記載を確認しました。" > "con";
 	print FNAME_HASH"のハッシュ値が一致するかを確認します。" > "con";
 	close("con");
-	CompareHash = AssaiVivace_Sub02();
+	AssaiVivace_CompareHash = ReturnHashValue(FNAME_SJIS);
 	
-	if(HashTableLine[2] != CompareHash){
+	if(HashTableLine[2] != AssaiVivace_CompareHash){
 		print FNAME_HASH"のハッシュ値が不一致でした。" > "con";
 		print "文字コードの再変換を行います。" > "con";
 		close("con");
@@ -114,17 +114,9 @@ function AssaiVivace_Sub01(){
 
 # ------------------------------------------------------------------------------------------------------------------------
 
-function AssaiVivace_Sub02(){
-	print FNAME_SJIS"のハッシュ値を取得します・・・" > "con";
-	close("con");
-	return GetHashValue(FNAME_SJIS);
-}
-
-# ------------------------------------------------------------------------------------------------------------------------
-
 function AssaiVivace_Sub00(){
 	AssaiVivace_Sub01();
-	RetHash = AssaiVivace_Sub02();
+	AssaiVivace_Sub00_RetHash = ReturnHashValue(FNAME_SJIS);
 	# ファイル名、ハッシュ値
 	delete HashTable;
 	GetHashTable();
@@ -140,7 +132,7 @@ function AssaiVivace_Sub00(){
 	}
 	delete HashTable;
 	print UTF8Line > FNAME_HASH;
-	print FNAME_SJIS","RetHash",," > FNAME_HASH;
+	print FNAME_SJIS","AssaiVivace_Sub00_RetHash > FNAME_HASH;
 	close(FNAME_HASH);
 }
 

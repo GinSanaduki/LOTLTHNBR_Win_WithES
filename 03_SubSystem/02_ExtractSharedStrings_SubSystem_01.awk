@@ -1,5 +1,6 @@
-#! /usr/bin/gawk
-# 08_Largo.awk
+#! /usr/bin/gawk -f
+# 02_ExtractSharedStrings_SubSystem_01.awk
+# gawk.exe -f AWKScripts/01_UPDATE/03_SubSystem/02_ExtractSharedStrings_SubSystem_01.awk -v Dir=Dir
 
 # ------------------------------------------------------------------------------------------------------------------------
 
@@ -26,21 +27,24 @@
 
 # ------------------------------------------------------------------------------------------------------------------------
 
-function Largo(Largo_XLSX){
-	# CSVに関しては、無条件で変換する（XLSX内のファイル内から引きこまなければわからないからだ）
-	# 拡張子を除外
-	len_Largo_XLSX_minus5 = length(Largo_XLSX) - 5;
-	Largo_DirName = substr(Largo_XLSX,1,len_Largo_XLSX_minus5);
-	Largo_FileName = Largo_XLSX;
-	MD(Largo_DirName);
-	Unzip(Largo_FileName,Largo_DirName);
-	UMLCleaner(Largo_DirName);
-	nkfSJIS(Largo_DirName);
-	InsCRLF(Largo_DirName);
-	ExplorerSheetName(Largo_DirName);
-	ExtractSharedStrings(Largo_DirName);
-	Extractsheet_ZEN_TODOUFUKEN(Largo_DirName);
-	OuterJoin(Largo_DirName);
-	UMLCleaner02(Largo_DirName);
+BEGIN{
+	cnt = 0;
+}
+
+/<sst xmlns="http:\/\/schemas.openxmlformats.org\/spreadsheetml\/2006\/main" count="[0-9].*?" uniqueCount="[0-9].*?">/,/<\/sst>/{
+	mat1 = match($0,/<sst xmlns="http:\/\/schemas.openxmlformats.org\/spreadsheetml\/2006\/main" count="[0-9].*?" uniqueCount="[0-9].*?">/);
+	mat2 = match($0,/<\/sst>/);
+	if((mat1 == 0) && (mat2 == 0)){
+		if($0 == "<si>"){
+			print "↓↓"cnt"番目↓↓";
+			print;
+		} else if($0 == "</si>"){
+			print;
+			print "↑↑"cnt"番目↑↑";
+			cnt++;
+		} else {
+			print;
+		}
+	}
 }
 

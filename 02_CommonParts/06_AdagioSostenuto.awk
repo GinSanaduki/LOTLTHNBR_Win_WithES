@@ -82,9 +82,9 @@ function AdagioSostenuto(){
 	print FNAME_HASH"に"FNAME_EDIT"の記載を確認しました。" > "con";
 	print FNAME_HASH"のハッシュ値が一致するかを確認します。" > "con";
 	close("con");
-	CompareHash = AdagioSostenuto_Sub02();
+	AdagioSostenuto_CompareHash = ReturnHashValue(FNAME_EDIT);
 	
-	if(HashTableLine[2] != CompareHash){
+	if(HashTableLine[2] != AdagioSostenuto_CompareHash){
 		print FNAME_HASH"のハッシュ値が不一致でした。" > "con";
 		print "文字コードの再変換を行います。" > "con";
 		close("con");
@@ -124,24 +124,16 @@ function AdagioSostenuto_Sub01(){
 	delete SJISArrays;
 	
 	# ハッシュ値取得のため、ファイルI/Oストリームを閉じる。
-	close(Fname_EDIT);
+	close(FNAME_EDIT);
 	print FNAME_SJIS"から"FNAME_EDIT"への編集処理が完了しました。" > "con";
 	close("con");
 }
 
 # ------------------------------------------------------------------------------------------------------------------------
 
-function AdagioSostenuto_Sub02(){
-	print FNAME_EDIT"のハッシュ値を取得します・・・" > "con";
-	close("con");
-	return GetHashValue(FNAME_EDIT);
-}
-
-# ------------------------------------------------------------------------------------------------------------------------
-
 function AdagioSostenuto_Sub00(){
 	AdagioSostenuto_Sub01();
-	RetHash = AdagioSostenuto_Sub02();
+	AdagioSostenuto_Sub00_RetHash = ReturnHashValue(FNAME_EDIT);
 	# ファイル名、ハッシュ値
 	delete HashTable;
 	GetHashTable();
@@ -168,7 +160,7 @@ function AdagioSostenuto_Sub00(){
 	delete HashTable;
 	print UTF8Line > FNAME_HASH;
 	print SJISLine > FNAME_HASH;
-	print FNAME_EDIT","RetHash",," > FNAME_HASH;
+	print FNAME_EDIT","AdagioSostenuto_Sub00_RetHash > FNAME_HASH;
 	close(FNAME_HASH);
 }
 

@@ -1,5 +1,6 @@
-#! /usr/bin/gawk
-# 08_Largo.awk
+#! /usr/bin/gawk -f
+# 04_ExtractSharedStrings_SubSystem_03.awk
+# gawk.exe -f AWKScripts/01_UPDATE/03_SubSystem/04_ExtractSharedStrings_SubSystem_03.awk
 
 # ------------------------------------------------------------------------------------------------------------------------
 
@@ -26,21 +27,37 @@
 
 # ------------------------------------------------------------------------------------------------------------------------
 
-function Largo(Largo_XLSX){
-	# CSVに関しては、無条件で変換する（XLSX内のファイル内から引きこまなければわからないからだ）
-	# 拡張子を除外
-	len_Largo_XLSX_minus5 = length(Largo_XLSX) - 5;
-	Largo_DirName = substr(Largo_XLSX,1,len_Largo_XLSX_minus5);
-	Largo_FileName = Largo_XLSX;
-	MD(Largo_DirName);
-	Unzip(Largo_FileName,Largo_DirName);
-	UMLCleaner(Largo_DirName);
-	nkfSJIS(Largo_DirName);
-	InsCRLF(Largo_DirName);
-	ExplorerSheetName(Largo_DirName);
-	ExtractSharedStrings(Largo_DirName);
-	Extractsheet_ZEN_TODOUFUKEN(Largo_DirName);
-	OuterJoin(Largo_DirName);
-	UMLCleaner02(Largo_DirName);
+BEGIN{
+	cnt = 0;
+	BitField = 0;
+}
+
+/^↓↓.*?番目↓↓$/{
+	gsub("↓","");
+	gsub("番目","");
+	cnt = $0;
+	next;
+}
+
+/<改行コード>$/{
+	if(BitField == 0){
+		BitField = 1;
+		Tex = cnt","$0;
+		printf Tex;
+		next;
+	} else if(BitField == 1){
+		printf $0;
+		next;
+	}
+}
+
+{
+	if(BitField == 1){
+		BitField = 0;
+		print;
+	} else {
+		Tex = cnt","$0;
+		print Tex;
+	}
 }
 

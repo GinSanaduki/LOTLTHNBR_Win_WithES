@@ -108,10 +108,10 @@ function InsCRLF(InsCRLF_DIRNAME){
 	while(InsCRLFCMD | getline esc){
 		esc2 = esc;
 		gsub("ConvertedSJIS_","InsertedCRLF_",esc2);
-		# Bourne Shell‚ÅÀs‚·‚é‚½‚ß‚ÆAƒJƒ“ƒ}‹æØ‚è‚ÌƒZƒ‹‚Æ‚¢‚¤–À˜f‚È‘ã•¨‚ª‘¶İ‚µ‚½‚½‚ß
+		# Bourne Shellã§å®Ÿè¡Œã™ã‚‹ãŸã‚ã¨ã€ã‚«ãƒ³ãƒåŒºåˆ‡ã‚Šã®ã‚»ãƒ«ã¨ã„ã†è¿·æƒ‘ãªä»£ç‰©ãŒå­˜åœ¨ã—ãŸãŸã‚
 		InsCRLFCMD2_01 = "cat \""InsCRLF_DIRNAME"/"esc"\" | ";
 		InsCRLFCMD2_02 = "sed -e 's/></>\\\n</g' | ";
-		InsCRLFCMD2_03 = "sed -e 's/,/A/g' > \""InsCRLF_DIRNAME"/"esc2"\" & ";
+		InsCRLFCMD2_03 = "sed -e 's/,/ã€/g' > \""InsCRLF_DIRNAME"/"esc2"\" & ";
 		InsCRLFCMD2 = InsCRLFCMD2_01 InsCRLFCMD2_02 InsCRLFCMD2_03;
 		print InsCRLFCMD2 > GENE_EXECSHELL;
 	}
@@ -121,7 +121,7 @@ function InsCRLF(InsCRLF_DIRNAME){
 	print "exit" > GENE_EXECSHELL;
 	print "" > GENE_EXECSHELL;
 	close(GENE_EXECSHELL);
-	# •À—ñˆ—‚Ì‚½‚ß
+	# ä¸¦åˆ—å‡¦ç†ã®ãŸã‚
 	ExecCmd(EXEC_SHELL);
 	ExecCmd(RM_SHELL);
 }
@@ -129,13 +129,13 @@ function InsCRLF(InsCRLF_DIRNAME){
 # ------------------------------------------------------------------------------------------------------------------------
 
 function ExplorerSheetName(ExplorerSheetName_DIRNAME){
-	# •s—vƒtƒ@ƒCƒ‹‚Ìíœ
-	# 1. <sheet name=‚Ågrep
-	# 2. ˜A”Ô‚ğU‚é
-	# EXCEL‚ÍA<sheets>ƒ^ƒO‚Ì’†‚ÅAƒ[ƒƒIƒŠƒWƒ“‚ÅŒ©‚ÄA‰½”Ô–Ú‚É‚ ‚éA‚Æ‚¢‚¤Œ©•û‚ğ‚·‚é
-	# 3. ‘S“s“¹•{Œ§‚Ìs‚ğœŠO
-	# 4. ƒJƒ“ƒ}‹æØ‚è‚Ì3ƒJƒ‰ƒ€–Ú‚ğØ‚èo‚·
-	# 5. o—Í‚³‚ê‚½ƒtƒ@ƒCƒ‹‚ğíœ
+	# ä¸è¦ãƒ•ã‚¡ã‚¤ãƒ«ã®å‰Šé™¤
+	# 1. <sheet name=ã§grep
+	# 2. é€£ç•ªã‚’æŒ¯ã‚‹
+	# EXCELã¯ã€<sheets>ã‚¿ã‚°ã®ä¸­ã§ã€ã‚¼ãƒ­ã‚ªãƒªã‚¸ãƒ³ã§è¦‹ã¦ã€ä½•ç•ªç›®ã«ã‚ã‚‹ã€ã¨ã„ã†è¦‹æ–¹ã‚’ã™ã‚‹
+	# 3. å…¨éƒ½é“åºœçœŒã®è¡Œã‚’é™¤å¤–
+	# 4. ã‚«ãƒ³ãƒåŒºåˆ‡ã‚Šã®3ã‚«ãƒ©ãƒ ç›®ã‚’åˆ‡ã‚Šå‡ºã™
+	# 5. å‡ºåŠ›ã•ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«ã‚’å‰Šé™¤
 	ExplorerSheetNameCMD01 = CALL_BUSYBOX" fgrep -e \"<sheet name=\" "ExplorerSheetName_DIRNAME"/InsertedCRLF_workbook.xml | ";
 	ExplorerSheetNameCMD02 = CALL_GAWK" -f AWKScripts/01_UPDATE/03_SubSystem/01_ExplorerSheetName_SubSystem_01.awk -v Dir="ExplorerSheetName_DIRNAME" | ";
 	ExplorerSheetNameCMD03 = CALL_BUSYBOX" fgrep -v -e \""KEYWORD_04"\" | ";
@@ -143,14 +143,13 @@ function ExplorerSheetName(ExplorerSheetName_DIRNAME){
 	ExplorerSheetNameCMD05 = CALL_BUSYBOX" xargs -P 4 rm > "OUT_DEVNULL;
 	ExplorerSheetNameCMD = ExplorerSheetNameCMD01 ExplorerSheetNameCMD02 ExplorerSheetNameCMD03 ExplorerSheetNameCMD04 ExplorerSheetNameCMD05;
 	ExecCmd(ExplorerSheetNameCMD);
-	# workbook.xmlŒn—ñ‚Ìíœ
+	# workbook.xmlç³»åˆ—ã®å‰Šé™¤
 	ExplorerSheetNameCMD_02_01 = CALL_BUSYBOX" find "ExplorerSheetName_DIRNAME" -type f | ";
 	ExplorerSheetNameCMD_02_02 = CALL_BUSYBOX" fgrep -e \"workbook.xml\" | ";
 	ExplorerSheetNameCMD_02_03 = CALL_BUSYBOX" xargs -P 4 rm > "OUT_DEVNULL;
 	ExplorerSheetNameCMD_02 = ExplorerSheetNameCMD_02_01 ExplorerSheetNameCMD_02_02 ExplorerSheetNameCMD_02_03;
 	ExecCmd(ExplorerSheetNameCMD_02);
-	
-	# c‘¶ƒtƒ@ƒCƒ‹–¼‚ÌC³
+	# æ®‹å­˜ãƒ•ã‚¡ã‚¤ãƒ«åã®ä¿®æ­£
 	ExplorerSheetNameCMD_03_01 = CALL_BUSYBOX" find "ExplorerSheetName_DIRNAME" -type f | ";
 	ExplorerSheetNameCMD_03_02 = CALL_BUSYBOX" fgrep -e \"sheet\"";
 	ExplorerSheetNameCMD_03 = ExplorerSheetNameCMD_03_01 ExplorerSheetNameCMD_03_02;
@@ -162,6 +161,140 @@ function ExplorerSheetName(ExplorerSheetName_DIRNAME){
 	}
 	close(ExplorerSheetNameCMD_03);
 	esc = "";
+}
+
+# ------------------------------------------------------------------------------------------------------------------------
+
+function ExtractSharedStrings(ExtractSharedStrings_DIRNAME){
+	ExtractSharedStrings_InputFileName = ExtractSharedStrings_DIRNAME"/InsertedCRLF_sharedStrings.xml";
+	ExtractSharedStrings_OutputFileName = ExtractSharedStrings_DIRNAME"/Extracted_sharedStrings.csv";
+	ExtractSharedStringsCMD01 = CALL_GAWK" -f AWKScripts/01_UPDATE/03_SubSystem/02_ExtractSharedStrings_SubSystem_01.awk "ExtractSharedStrings_InputFileName" | ";
+	ExtractSharedStringsCMD02 = CALL_BUSYBOX" fgrep -v -e \"<phoneticPr fontId=\" -e \"<rPh sb=\" -e \"</rPh>\" -e \"</si>\" -e \"<si>\" | ";
+	ExtractSharedStringsCMD03 = CALL_GAWK" -f AWKScripts/01_UPDATE/03_SubSystem/03_ExtractSharedStrings_SubSystem_02.awk | ";
+	ExtractSharedStringsCMD04 = CALL_BUSYBOX" fgrep -v -e \""KEYWORD_05"\" | ";
+	ExtractSharedStringsCMD05 = CALL_GAWK" -f AWKScripts/01_UPDATE/03_SubSystem/04_ExtractSharedStrings_SubSystem_03.awk | ";
+	ExtractSharedStringsCMD06 = CALL_GAWK" -f AWKScripts/01_UPDATE/03_SubSystem/05_ExtractSharedStrings_SubSystem_04.awk";
+	ExtractSharedStringsCMD = ExtractSharedStringsCMD01 ExtractSharedStringsCMD02 ExtractSharedStringsCMD03 ExtractSharedStringsCMD04 ExtractSharedStringsCMD05 ExtractSharedStringsCMD06" > \""ExtractSharedStrings_OutputFileName"\"";
+	ExecCmd(ExtractSharedStringsCMD);
+}
+
+# ------------------------------------------------------------------------------------------------------------------------
+
+function Extractsheet_ZEN_TODOUFUKEN(Extractsheet_ZEN_TODOUFUKEN_DIRNAME){
+	Extractsheet_ZEN_TODOUFUKEN_InputFileName = Extractsheet_ZEN_TODOUFUKEN_DIRNAME"/InsertedCRLF_sheet_ZEN_TODOUFUKEN.xml";
+	Extractsheet_ZEN_TODOUFUKEN_OutputFileName = Extractsheet_ZEN_TODOUFUKEN_DIRNAME"/Extracted_sheet_ZEN_TODOUFUKEN.csv";
+	Extractsheet_ZEN_TODOUFUKENCMD_01 = CALL_GAWK" -f AWKScripts/01_UPDATE/03_SubSystem/06_Extractsheet_ZEN_TODOUFUKEN_SubSystem_01.awk \""Extractsheet_ZEN_TODOUFUKEN_InputFileName"\" | ";
+	Extractsheet_ZEN_TODOUFUKENCMD_02 = CALL_BUSYBOX" fgrep -v -e \"<row r=\" -e \"<f>VLOOKUP\" -e \"</row>\" | ";
+	Extractsheet_ZEN_TODOUFUKENCMD_03 = CALL_GAWK" -f AWKScripts/01_UPDATE/03_SubSystem/07_Extractsheet_ZEN_TODOUFUKEN_SubSystem_02.awk | ";
+	Extractsheet_ZEN_TODOUFUKENCMD_04 = CALL_GAWK" -f AWKScripts/01_UPDATE/03_SubSystem/08_Extractsheet_ZEN_TODOUFUKEN_SubSystem_03.awk | ";
+	Extractsheet_ZEN_TODOUFUKENCMD_05 = CALL_GAWK" -f AWKScripts/01_UPDATE/03_SubSystem/09_Extractsheet_ZEN_TODOUFUKEN_SubSystem_04.awk | ";
+	Extractsheet_ZEN_TODOUFUKENCMD_06 = CALL_GAWK" -f AWKScripts/01_UPDATE/03_SubSystem/10_Extractsheet_ZEN_TODOUFUKEN_SubSystem_05.awk | ";
+	Extractsheet_ZEN_TODOUFUKENCMD_07 = CALL_GAWK" -f AWKScripts/01_UPDATE/03_SubSystem/11_Extractsheet_ZEN_TODOUFUKEN_SubSystem_06.awk | ";
+	Extractsheet_ZEN_TODOUFUKENCMD_08 = CALL_GAWK" -f AWKScripts/01_UPDATE/03_SubSystem/12_Extractsheet_ZEN_TODOUFUKEN_SubSystem_07.awk | ";
+	Extractsheet_ZEN_TODOUFUKENCMD_09 = CALL_GAWK" -f AWKScripts/01_UPDATE/03_SubSystem/13_Extractsheet_ZEN_TODOUFUKEN_SubSystem_08.awk | ";
+	Extractsheet_ZEN_TODOUFUKENCMD_10 = CALL_GAWK" -f AWKScripts/01_UPDATE/03_SubSystem/14_Extractsheet_ZEN_TODOUFUKEN_SubSystem_09.awk";
+	Extractsheet_ZEN_TODOUFUKENCMD = Extractsheet_ZEN_TODOUFUKENCMD_01 Extractsheet_ZEN_TODOUFUKENCMD_02 Extractsheet_ZEN_TODOUFUKENCMD_03 Extractsheet_ZEN_TODOUFUKENCMD_04 Extractsheet_ZEN_TODOUFUKENCMD_05 Extractsheet_ZEN_TODOUFUKENCMD_06 Extractsheet_ZEN_TODOUFUKENCMD_07 Extractsheet_ZEN_TODOUFUKENCMD_08 Extractsheet_ZEN_TODOUFUKENCMD_09 Extractsheet_ZEN_TODOUFUKENCMD_10" > \""Extractsheet_ZEN_TODOUFUKEN_OutputFileName"\"";
+	ExecCmd(Extractsheet_ZEN_TODOUFUKENCMD);
+}
+
+# ------------------------------------------------------------------------------------------------------------------------
+
+function OuterJoin(OuterJoin_DIRNAME){
+	OuterJoin_InputFileName = OuterJoin_DIRNAME"/Extracted_sheet_ZEN_TODOUFUKEN.csv";
+	OuterJoin_OutputFileName = OuterJoin_DIRNAME"/"KEYWORD_06;
+	OuterJoinCMD_01 = CALL_GAWK" -f AWKScripts/01_UPDATE/03_SubSystem/15_OuterJoin_SubSystem_01.awk -v Dir="OuterJoin_DIRNAME" \""OuterJoin_InputFileName"\" | ";
+	OuterJoinCMD_02 = CALL_BUSYBOX" sort -k 3n,3 -k 2f,2 -t \",\" | ";
+	OuterJoinCMD_03 = CALL_BUSYBOX" unix2dos";
+	OuterJoinCMD = OuterJoinCMD_01 OuterJoinCMD_02 OuterJoinCMD_03 " > \""OuterJoin_OutputFileName"\"";
+	ExecCmd(OuterJoinCMD);
+}
+
+# ------------------------------------------------------------------------------------------------------------------------
+
+function UMLCleaner02(UMLCleaner02_DIRNAME){
+	UMLCleaner02CMD_01 = CALL_BUSYBOX" find "UMLCleaner02_DIRNAME" -type f | ";
+	UMLCleaner02CMD_02 = CALL_BUSYBOX" fgrep -v -e \""KEYWORD_06"\" | ";
+	UMLCleaner02CMD_03 = CALL_BUSYBOX" xargs -P 4 rm > "OUT_DEVNULL;
+	UMLCleaner02CMD = UMLCleaner02CMD_01 UMLCleaner02CMD_02 UMLCleaner02CMD_03;
+	ExecCmd(UMLCleaner02CMD);
+}
+
+# ------------------------------------------------------------------------------------------------------------------------
+
+function GenerateDefineCSVTitle(GenerateDefineCSVTitle_DIRNAME){
+	GenerateDefineCSVTitle_InputFileName = GenerateDefineCSVTitle_DIRNAME"/"KEYWORD_06;
+	GenerateDefineCSVTitleCMD_01 = CALL_BUSYBOX" fgrep -e \""KEYWORD_07"\" \""GenerateDefineCSVTitle_InputFileName"\" | ";
+	GenerateDefineCSVTitleCMD_02 = CALL_BUSYBOX" cut -f 5 -d \",\"";
+	GenerateDefineCSVTitleCMD = GenerateDefineCSVTitleCMD_01 GenerateDefineCSVTitleCMD_02;
+	GenerateDefineCSVTitle_TitleLine = RetTextExecCmd(GenerateDefineCSVTitleCMD);
+	match(GenerateDefineCSVTitle_TitleLine,/[å¹³æˆ|ä»¤å’Œ][0-9]{1,2}å¹´[0-9]{1,2}æœˆ/);
+	GenerateDefineCSVTitle_CSVTitle_FROM = substr(GenerateDefineCSVTitle_TitleLine,RSTART - 1,RLENGTH + 1);
+	GenerateDefineCSVTitle_TitleLine_02 = GenerateDefineCSVTitle_TitleLine;
+	gsub(GenerateDefineCSVTitle_CSVTitle_FROM,"",GenerateDefineCSVTitle_TitleLine_02);
+	match(GenerateDefineCSVTitle_TitleLine_02,/[å¹³æˆ|ä»¤å’Œ][0-9]{1,2}å¹´[0-9]{1,2}æœˆ/);
+	GenerateDefineCSVTitle_CSVTitle_To = substr(GenerateDefineCSVTitle_TitleLine_02,RSTART - 1,RLENGTH + 1);
+	GenerateDefineCSVTitle_DIR = gensub(/AcquiredXLSX\//,"","g",GenerateDefineCSVTitle_DIRNAME);
+	GenerateXLSXNAME = gensub(/From_[0-9]{6}_To_[0-9]{6}_/,"","g",GenerateDefineCSVTitle_DIR);
+	GenerateDefineCSVTitle_FROMYYYYMM = RepYears(GenerateDefineCSVTitle_CSVTitle_FROM);
+	GenerateDefineCSVTitle_ToYYYYMM = RepYears(GenerateDefineCSVTitle_CSVTitle_To);
+	GeneName = "DefineCSV/Define_Gene_"strftime("%Y%m%d",systime())"_XML_From_"GenerateDefineCSVTitle_FROMYYYYMM"_To_"GenerateDefineCSVTitle_ToYYYYMM"_OriginXLSX_"GenerateXLSXNAME".csv";
+	return GeneName;
+}
+
+# ------------------------------------------------------------------------------------------------------------------------
+
+function ReturnHashValue(ReturnHashValue_FileName){
+	print ReturnHashValue_FileName"ã®ãƒãƒƒã‚·ãƒ¥å€¤ã‚’å–å¾—ã—ã¾ã™ãƒ»ãƒ»ãƒ»" > "con";
+	close("con");
+	return GetHashValue(ReturnHashValue_FileName);
+}
+
+# ------------------------------------------------------------------------------------------------------------------------
+
+function SearchLine(SearchCols_DIR,SearchCols_WORD){
+	SearchLine_InputFileName = SearchCols_DIR"/"KEYWORD_06;
+	SearchLineCMD = CALL_BUSYBOX" fgrep -e \""SearchCols_WORD"\" \""SearchLine_InputFileName"\"";
+	while(SearchLineCMD | getline SearchLine_ResultLine){
+		split(SearchLine_ResultLine,SearchLine_ResultLineArrays,",");
+		if(SearchLine_ResultLineArrays[5] == ColSearchWord01 || 
+			SearchLine_ResultLineArrays[5] == ColSearchWord02 || 
+			SearchLine_ResultLineArrays[5] == ColSearchWord03){
+			delete SearchLine_ResultLineArrays;
+			break;
+		}
+		delete SearchLine_ResultLineArrays;
+	}
+	close(SearchLineCMD);
+	return SearchLine_ResultLine;
+}
+
+# ------------------------------------------------------------------------------------------------------------------------
+
+function DelugeMyth(DelugeMyth_DIR,DelugeMyth_NOAHsARKCOL01,DelugeMyth_NOAHsARKCOL02,DelugeMyth_NOAHsARKCOL03,DelugeMyth_NOAHsARKROW01,DelugeMyth_NOAHsARKROW02,DelugeMyth_NOAHsARKROW03){
+	DelugeMyth_InputFileName = DelugeMyth_DIR"/"KEYWORD_06;
+	DelugeMyth_OutPutFileName = DelugeMyth_DIR"/"KEYWORD_11;
+	DelugeMythCMD01 = CALL_GAWK" -f AWKScripts/01_UPDATE/03_SubSystem/16_DelugeMyth_SubSystem_01.awk";
+	DelugeMythCMD02 = "-v DelugeMyth_NOAHsARKCOL01="DelugeMyth_NOAHsARKCOL01;
+	DelugeMythCMD03 = "-v DelugeMyth_NOAHsARKCOL02="DelugeMyth_NOAHsARKCOL02;
+	DelugeMythCMD04 = "-v DelugeMyth_NOAHsARKCOL03="DelugeMyth_NOAHsARKCOL03;
+	DelugeMythCMD05 = "-v DelugeMyth_NOAHsARKROW01="DelugeMyth_NOAHsARKROW01;
+	DelugeMythCMD06 = "-v DelugeMyth_NOAHsARKROW02="DelugeMyth_NOAHsARKROW02;
+	DelugeMythCMD07 = "-v DelugeMyth_NOAHsARKROW03="DelugeMyth_NOAHsARKROW03;
+	DelugeMythCMD = DelugeMythCMD01" "DelugeMythCMD02" "DelugeMythCMD03" "DelugeMythCMD04" "DelugeMythCMD05" "DelugeMythCMD06" "DelugeMythCMD07" "DelugeMyth_InputFileName" > \""DelugeMyth_OutPutFileName"\"";
+	ExecCmd(DelugeMythCMD);
+}
+
+# ------------------------------------------------------------------------------------------------------------------------
+
+function GenerateDefineCSV(GenerateDefineCSV_DIR,GenerateDefineCSV_OUT,GenerateDefineCSV_COL01,GenerateDefineCSV_COL02,GenerateDefineCSV_COL03){
+	GenerateDefineCSV_InputFileName = GenerateDefineCSV_DIR"/"KEYWORD_11;
+	GenerateDefineCSV_OutPutFileName = GenerateDefineCSV_OUT;
+	GenerateDefineCSVCMD_01 = CALL_GAWK" -f AWKScripts/01_UPDATE/03_SubSystem/17_GenerateDefineCSV_SubSystem_01.awk";
+	GenerateDefineCSVCMD_02 = "-v GenerateDefineCSV_COL01="GenerateDefineCSV_COL01;
+	GenerateDefineCSVCMD_03 = "-v GenerateDefineCSV_COL02="GenerateDefineCSV_COL02;
+	GenerateDefineCSVCMD_04 = "-v GenerateDefineCSV_COL03="GenerateDefineCSV_COL03;
+	GenerateDefineCSVCMD = GenerateDefineCSVCMD_01" "GenerateDefineCSVCMD_02" "GenerateDefineCSVCMD_03" "GenerateDefineCSVCMD_04" "GenerateDefineCSV_InputFileName" > \""GenerateDefineCSV_OutPutFileName"\"";
+	ExecCmd(GenerateDefineCSVCMD);
 }
 
 # ------------------------------------------------------------------------------------------------------------------------

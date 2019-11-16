@@ -85,7 +85,7 @@ function Introduzione(){
 	print FNAME_HASH"に"Introduzione_OutXLSXName"の記載を確認しました。" > "con";
 	print FNAME_HASH"のハッシュ値が一致するかを確認します。" > "con";
 	close("con");
-	Introduzione_CompareHash = Introduzione_SubSystem04(Introduzione_OutXLSXName);
+	Introduzione_CompareHash = ReturnHashValue(Introduzione_OutXLSXName);
 	
 	if(HashTableLine[2] != Introduzione_CompareHash){
 		print FNAME_HASH"のハッシュ値が不一致でした。" > "con";
@@ -130,13 +130,14 @@ function Introduzione(){
 	print Introduzione_OutXLSXName"の確認を終了します。" > "con";
 	close("con");
 	delete HashTableLine;
+	return Introduzione_OutXLSXName;
 }
 
 # ------------------------------------------------------------------------------------------------------------------------
 
 function Introduzione_SubSystem00(Introduzione_SubSystem00_LINK,Introduzione_SubSystem00_XLSX){
 	Introduzione_SubSystem03(Introduzione_SubSystem00_LINK,Introduzione_SubSystem00_XLSX);
-	Introduzione_SubSystem00_RetHash = Introduzione_SubSystem04(Introduzione_SubSystem00_XLSX);
+	Introduzione_SubSystem00_RetHash = ReturnHashValue(Introduzione_SubSystem00_XLSX);
 	# ファイル名、ハッシュ値、ETag値、Contents-Length値
 	delete HashTable;
 	GetHashTable();
@@ -190,7 +191,6 @@ function Introduzione_SubSystem01(){
 	split(Introduzione_SubSystem01_ReplaceLinks,Introduzione_SubSystem01_ReplaceLinksLine,"/");
 	OriginXLSX = Introduzione_SubSystem01_ReplaceLinksLine[length(Introduzione_SubSystem01_ReplaceLinksLine)];
 	delete Introduzione_SubSystem01_ReplaceLinksLine;
-	print OriginXLSX;
 	Introduzione_SubSystem01_KeyText_02 = Introduzione_SubSystem01_KeyText;
 	gsub(KEYWORD_01,"",Introduzione_SubSystem01_KeyText_02);
 	gsub("（","",Introduzione_SubSystem01_KeyText_02);
@@ -199,10 +199,10 @@ function Introduzione_SubSystem01(){
 	Introduzione_SubSystem01_KeyText_03 = RepYears(Introduzione_SubSystem01_KeyText_02);
 	FromYYYYMM = substr(Introduzione_SubSystem01_KeyText_03,1,6);
 	ToYYYYMM = substr(Introduzione_SubSystem01_KeyText_03,8,6);
-	Introduzione_SubSystem01_ReturnName_01 = DIR_ACQUIREDXLSX"/GetDate_"strftime("%Y%m%d",systime());
-	Introduzione_SubSystem01_ReturnName_02 = "_UnderText_FromYYYYMMDD_"FromYYYYMM;
-	Introduzione_SubSystem01_ReturnName_03 = "_ToYYYYMMDD_"ToYYYYMM;
-	Introduzione_SubSystem01_ReturnName_04 = "_OriginName_"OriginXLSX;
+	Introduzione_SubSystem01_ReturnName_01 = DIR_ACQUIREDXLSX"/Acquisition_"strftime("%Y%m%d",systime());
+	Introduzione_SubSystem01_ReturnName_02 = "_UnderText_From_"FromYYYYMM;
+	Introduzione_SubSystem01_ReturnName_03 = "_To_"ToYYYYMM;
+	Introduzione_SubSystem01_ReturnName_04 = "_Origin_"OriginXLSX;
 	Introduzione_SubSystem01_ReturnName = Introduzione_SubSystem01_ReturnName_01 Introduzione_SubSystem01_ReturnName_02 Introduzione_SubSystem01_ReturnName_03 Introduzione_SubSystem01_ReturnName_04;
 	return Introduzione_SubSystem01_ReturnName;
 }
@@ -278,14 +278,6 @@ function Introduzione_SubSystem03(Introduzione_SubSystem03_LINK,Introduzione_Sub
 	GetContents(Introduzione_SubSystem03_LINK,Introduzione_SubSystem03_XLSX);
 	print "文科省HPからの"Introduzione_SubSystem03_LINK"のダウンロードが完了しました。" > "con";
 	close("con");
-}
-
-# ------------------------------------------------------------------------------------------------------------------------
-
-function Introduzione_SubSystem04(Introduzione_SubSystem04_XLSX){
-	print Introduzione_SubSystem04_XLSX"のハッシュ値を取得します・・・" > "con";
-	close("con");
-	return GetHashValue(Introduzione_SubSystem04_XLSX);
 }
 
 # ------------------------------------------------------------------------------------------------------------------------

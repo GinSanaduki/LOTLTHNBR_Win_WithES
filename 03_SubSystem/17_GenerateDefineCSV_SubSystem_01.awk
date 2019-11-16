@@ -1,5 +1,6 @@
-#! /usr/bin/gawk
-# 08_Largo.awk
+#! /usr/bin/gawk -f
+# 17_GenerateDefineCSV_SubSystem_01.awk
+# gawk.exe -f AWKScripts/01_UPDATE/03_SubSystem/17_GenerateDefineCSV_SubSystem_01.awk -v GenerateDefineCSV_COL01=GenerateDefineCSV_COL01 -v GenerateDefineCSV_COL02=GenerateDefineCSV_COL02 -v GenerateDefineCSV_COL03=GenerateDefineCSV_COL03 DelugeMythed.csv > GenerateDefineCSV_OUT.csv
 
 # ------------------------------------------------------------------------------------------------------------------------
 
@@ -26,21 +27,46 @@
 
 # ------------------------------------------------------------------------------------------------------------------------
 
-function Largo(Largo_XLSX){
-	# CSVに関しては、無条件で変換する（XLSX内のファイル内から引きこまなければわからないからだ）
-	# 拡張子を除外
-	len_Largo_XLSX_minus5 = length(Largo_XLSX) - 5;
-	Largo_DirName = substr(Largo_XLSX,1,len_Largo_XLSX_minus5);
-	Largo_FileName = Largo_XLSX;
-	MD(Largo_DirName);
-	Unzip(Largo_FileName,Largo_DirName);
-	UMLCleaner(Largo_DirName);
-	nkfSJIS(Largo_DirName);
-	InsCRLF(Largo_DirName);
-	ExplorerSheetName(Largo_DirName);
-	ExtractSharedStrings(Largo_DirName);
-	Extractsheet_ZEN_TODOUFUKEN(Largo_DirName);
-	OuterJoin(Largo_DirName);
-	UMLCleaner02(Largo_DirName);
+BEGIN{
+	FS = ",";
+	cnt = 0;
+	BitField01 = 0;
+	BitField02 = 0;
+	Tex = "";
+}
+
+($2 == GenerateDefineCSV_COL01 && BitField01 == 0){
+	BitField01 = 1;
+	Tex = "";
+	cnt = $3;
+	Tex = $3","$5",";
+	next;
+}
+
+($2 == GenerateDefineCSV_COL02 && BitField01 == 1 && $3 == cnt){
+	BitField02 = 1;
+	Tex = Tex $5",";
+	next;
+}
+
+($2 == GenerateDefineCSV_COL03 && BitField01 == 1 && BitField02 == 1 && $3 == cnt){
+	Tex = Tex $5;
+	gsub("<改行コード>","、",Tex);
+	print Tex;
+	Tex = "";
+	BitField01 = 0;
+	BitField02 = 0;
+}
+
+# 教科欄が空のケースが存在するため
+($2 == GenerateDefineCSV_COL01 && BitField01 == 1 && BitField02 == 1){
+	gsub("<改行コード>","、",Tex);
+	print Tex;
+	Tex = "";
+	BitField01 = 1;
+	BitField02 = 0;
+	cnt = $3;
+	Tex = $3","$5",";
+	next;
 }
 

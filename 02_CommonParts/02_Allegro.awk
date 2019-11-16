@@ -30,7 +30,7 @@ function Allegro(){
 	# 本日分のAcquiredHTML_UTF8/未返納教員免許状一覧_文部科学省_YYYYMMDD.txtの存在確認
 	print FNAME_UTF8"が存在するか確認します・・・" > "con";
 	close("con");
-	cmd="LinuxTools\\busybox.exe ls \""FNAME_UTF8"\" > "OUT_DEVNULL;
+	cmd = CALL_BUSYBOX" ls \""FNAME_UTF8"\" > "OUT_DEVNULL;
 	ret = RetExecCmd(cmd);
 	# 取得していない場合、取得する
 	if(ret == 1){
@@ -111,20 +111,12 @@ function Allegro_Sub01(){
 
 # ------------------------------------------------------------------------------------------------------------------------
 
-function Allegro_Sub02(){
-	print FNAME_UTF8"のハッシュ値を取得します・・・" > "con";
-	close("con");
-	return GetHashValue(FNAME_UTF8);
-}
-
-# ------------------------------------------------------------------------------------------------------------------------
-
 function Allegro_Sub00(){
 	Allegro_Sub01();
-	RetHash = Allegro_Sub02();
+	Allegro_Sub00_RetHash = ReturnHashValue(FNAME_UTF8);
 	# ファイル名、ハッシュ値、ETag値、Last-ModifiedのYYYYMMDDHHmmSS表記
 	# 本日分のリセットも兼ねている
-	print FNAME_UTF8","RetHash","ETag","YYYYMMDDHHmmSS > FNAME_HASH;
+	print FNAME_UTF8","Allegro_Sub00_RetHash","ETag","YYYYMMDDHHmmSS > FNAME_HASH;
 	close(FNAME_HASH);
 }
 

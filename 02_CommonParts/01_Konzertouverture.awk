@@ -26,7 +26,7 @@
 
 # ------------------------------------------------------------------------------------------------------------------------
 
-function Hammerklavier_Initialize(){
+function Konzertouverture(){
 	Declaration();
 	DirPrep();
 }
@@ -50,10 +50,14 @@ function Declaration(){
 	KEYWORD_02 = "<a href=\\\"\\/a_menu\\/shotou\\/kyoin\\/__icsFiles\\/afieldfile\\/2[0-9][0-9][0-9]\\/[0-1][0-9]\\/[0-3][0-9]\\/.+\\.xlsx";
 	KEYWORD_03 = substr(MEXT_URL,1,21);
 	KEYWORD_04 = "全都道府県";
+	KEYWORD_05 = "↑↑";
+	KEYWORD_06 = "OuterJoined.csv";
+	KEYWORD_07 = "教員免許状一覧";
+	KEYWORD_08 = "授与権者";
+	KEYWORD_09 = "免許番号";
+	KEYWORD_10 = "教科";
+	KEYWORD_11 = "DelugeMythed.csv";
 	GENE_EXECSHELL = "EXECSHELL.sh";
-	ColSearchWord01 = "授与権者";
-	ColSearchWord02 = "免許番号";
-	ColSearchWord03 = "教科";
 	CALL_BUSYBOX = "LinuxTools\\busybox.exe";
 	CALL_BUSYBOX_GLOB = "LinuxTools\\busybox_glob.exe";
 	CALL_NKF32 = "LinuxTools\\nkf32.exe";
@@ -71,6 +75,7 @@ function DirPrep(){
 	MD(DIR_HTML_EDIT);
 	MD(DIR_DEFINECSV);
 	MD(DIR_ACQUIREDXLSX);
+	RMTMP();
 	GENEHASH();
 }
 
@@ -118,6 +123,18 @@ function RM(DIR_RM){
 function MDRM(DIR_MDRM){
 	RM(DIR_MDRM);
 	MD(DIR_MDRM);
+}
+
+# ------------------------------------------------------------------------------------------------------------------------
+
+function RMTMP(){
+	RMTMPCMD01 = CALL_BUSYBOX_GLOB" ls "DIR_ACQUIREDXLSX"/* > "OUT_DEVNULL;
+	RMTMP_RET = RetExecCmd(RMTMPCMD01);
+	if(RMTMP_RET == 1){
+		return;
+	}
+	RMTMPCMD02 = CALL_BUSYBOX_GLOB" find "DIR_ACQUIREDXLSX"/* -type d -maxdepth 0 | "CALL_BUSYBOX" xargs -P 4 rm -r > "OUT_DEVNULL;
+	ExecCmd(RMTMPCMD02);
 }
 
 # ------------------------------------------------------------------------------------------------------------------------

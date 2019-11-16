@@ -1,5 +1,6 @@
-#! /usr/bin/gawk
-# 08_Largo.awk
+#! /usr/bin/gawk -f
+# 12_Extractsheet_ZEN_TODOUFUKEN_SubSystem_07.awk
+# gawk.exe -f AWKScripts/01_UPDATE/03_SubSystem/12_Extractsheet_ZEN_TODOUFUKEN_SubSystem_07.awk
 
 # ------------------------------------------------------------------------------------------------------------------------
 
@@ -26,21 +27,14 @@
 
 # ------------------------------------------------------------------------------------------------------------------------
 
-function Largo(Largo_XLSX){
-	# CSVに関しては、無条件で変換する（XLSX内のファイル内から引きこまなければわからないからだ）
-	# 拡張子を除外
-	len_Largo_XLSX_minus5 = length(Largo_XLSX) - 5;
-	Largo_DirName = substr(Largo_XLSX,1,len_Largo_XLSX_minus5);
-	Largo_FileName = Largo_XLSX;
-	MD(Largo_DirName);
-	Unzip(Largo_FileName,Largo_DirName);
-	UMLCleaner(Largo_DirName);
-	nkfSJIS(Largo_DirName);
-	InsCRLF(Largo_DirName);
-	ExplorerSheetName(Largo_DirName);
-	ExtractSharedStrings(Largo_DirName);
-	Extractsheet_ZEN_TODOUFUKEN(Largo_DirName);
-	OuterJoin(Largo_DirName);
-	UMLCleaner02(Largo_DirName);
+{
+	gsub("</v></c>","");
+	gsub(" t=\"s\"","");
+	gsub("<c r=\"","");
+	gsub("\"","");
+	gsub(" ","");
+	gsub("s=",",");
+	gsub("><v>",",");
+	print;
 }
 
