@@ -175,7 +175,8 @@ function ExtractSharedStrings(ExtractSharedStrings_DIRNAME){
 	ExtractSharedStringsCMD05 = CALL_GAWK" -f AWKScripts/01_UPDATE/03_SubSystem/04_ExtractSharedStrings_SubSystem_03.awk | ";
 	ExtractSharedStringsCMD06 = CALL_GAWK" -f AWKScripts/01_UPDATE/03_SubSystem/05_ExtractSharedStrings_SubSystem_04.awk";
 	ExtractSharedStringsCMD = ExtractSharedStringsCMD01 ExtractSharedStringsCMD02 ExtractSharedStringsCMD03 ExtractSharedStringsCMD04 ExtractSharedStringsCMD05 ExtractSharedStringsCMD06" > \""ExtractSharedStrings_OutputFileName"\"";
-	ExecCmd(ExtractSharedStringsCMD);
+	# ExecCmd(ExtractSharedStringsCMD);
+	return ExtractSharedStringsCMD;
 }
 
 # ------------------------------------------------------------------------------------------------------------------------
@@ -194,7 +195,8 @@ function Extractsheet_ZEN_TODOUFUKEN(Extractsheet_ZEN_TODOUFUKEN_DIRNAME){
 	Extractsheet_ZEN_TODOUFUKENCMD_09 = CALL_GAWK" -f AWKScripts/01_UPDATE/03_SubSystem/13_Extractsheet_ZEN_TODOUFUKEN_SubSystem_08.awk | ";
 	Extractsheet_ZEN_TODOUFUKENCMD_10 = CALL_GAWK" -f AWKScripts/01_UPDATE/03_SubSystem/14_Extractsheet_ZEN_TODOUFUKEN_SubSystem_09.awk";
 	Extractsheet_ZEN_TODOUFUKENCMD = Extractsheet_ZEN_TODOUFUKENCMD_01 Extractsheet_ZEN_TODOUFUKENCMD_02 Extractsheet_ZEN_TODOUFUKENCMD_03 Extractsheet_ZEN_TODOUFUKENCMD_04 Extractsheet_ZEN_TODOUFUKENCMD_05 Extractsheet_ZEN_TODOUFUKENCMD_06 Extractsheet_ZEN_TODOUFUKENCMD_07 Extractsheet_ZEN_TODOUFUKENCMD_08 Extractsheet_ZEN_TODOUFUKENCMD_09 Extractsheet_ZEN_TODOUFUKENCMD_10" > \""Extractsheet_ZEN_TODOUFUKEN_OutputFileName"\"";
-	ExecCmd(Extractsheet_ZEN_TODOUFUKENCMD);
+	# ExecCmd(Extractsheet_ZEN_TODOUFUKENCMD);
+	return Extractsheet_ZEN_TODOUFUKENCMD;
 }
 
 # ------------------------------------------------------------------------------------------------------------------------

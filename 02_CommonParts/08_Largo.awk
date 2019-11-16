@@ -38,9 +38,29 @@ function Largo(Largo_XLSX){
 	nkfSJIS(Largo_DirName);
 	InsCRLF(Largo_DirName);
 	ExplorerSheetName(Largo_DirName);
-	ExtractSharedStrings(Largo_DirName);
-	Extractsheet_ZEN_TODOUFUKEN(Largo_DirName);
+	# ExtractSharedStringsとExtractsheet_ZEN_TODOUFUKENを並列実行
+	Largo_CMD01 = ExtractSharedStrings(Largo_DirName);
+	Largo_CMD02 = Extractsheet_ZEN_TODOUFUKEN(Largo_DirName);
+	Largo_Sub01(Largo_CMD01,Largo_CMD02);
 	OuterJoin(Largo_DirName);
 	UMLCleaner02(Largo_DirName);
 }
+
+# ------------------------------------------------------------------------------------------------------------------------
+
+function Largo_Sub01(Largo_Sub01_CMD01,Largo_Sub01_CMD02){
+	print "#! /bin/sh" > GENE_EXECSHELL;
+	print Largo_Sub01_CMD01" & " > GENE_EXECSHELL;
+	print Largo_Sub01_CMD02" & " > GENE_EXECSHELL;
+	print "wait" > GENE_EXECSHELL;
+	print "exit" > GENE_EXECSHELL;
+	print "" > GENE_EXECSHELL;
+	close(GENE_EXECSHELL);
+	# 並列処理のため
+	exit
+	ExecCmd(EXEC_SHELL);
+	ExecCmd(RM_SHELL);
+}
+
+# ------------------------------------------------------------------------------------------------------------------------
 
