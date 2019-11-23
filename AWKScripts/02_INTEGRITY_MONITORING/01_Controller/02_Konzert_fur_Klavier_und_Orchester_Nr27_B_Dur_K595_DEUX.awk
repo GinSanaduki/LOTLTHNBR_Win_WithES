@@ -1,5 +1,5 @@
 #! /usr/bin/gawk
-# 01_Konzert_fur_Klavier_und_Orchester_Nr27_B_Dur_K595.awk
+# 02_Konzert_fur_Klavier_und_Orchester_Nr27_B_Dur_K595_DEUX.awk
 
 # ------------------------------------------------------------------------------------------------------------------------
 
@@ -31,23 +31,21 @@
 @include "AWKScripts/02_INTEGRITY_MONITORING/02_CommonParts/01_Konzertouverture.awk";
 @include "AWKScripts/02_INTEGRITY_MONITORING/02_CommonParts/02_Allegro.awk";
 @include "AWKScripts/02_INTEGRITY_MONITORING/02_CommonParts/15_Larghetto.awk";
+@include "AWKScripts/02_INTEGRITY_MONITORING/02_CommonParts/16_Allegro_Rondo.awk";
 
 # ------------------------------------------------------------------------------------------------------------------------
 
 BEGIN{
-	print "Konzert fur Klavier und Orchester Nr.27 B-Dur K.595 will commence shortly.";
 	print "START Konzertouverture_02...";
 	Konzertouverture_02();
 	print "END Konzertouverture_02.";
-	print "START Allegro...";
-	Klavier_RetCode_01 = Allegro();
-	print "END Allegro.";
-	if(Klavier_RetCode_01 != 0){
-		exit 0;
-	}
-	print "START Larghetto...";
-	Larghetto();
-	print "END Larghetto.";
+	print "START Allegro_Rondo...";
+	Allegro_Rondo();
+	print "END Allegro_Rondo.";
 	print "That's all, folks...";
 }
 
+# 16_Allegro_Rondo.awk
+# ①catでハッシュ表を全て吸い上げ、deleteマーカー行を除外し、sortで名前の逆順にソートを行い、各ジャンル毎に配列に格納する。
+# ②本日日付の各要素のハッシュ値を基準として、過去日付のハッシュを比較する。同一なら比較した過去日付のファイルを削除し、配列から削除する。不一致の場合、基準ハッシュ値を変更し、続行する。
+# ③ハッシュ表を全部削除し、各日付毎にハッシュ表を作り直す。

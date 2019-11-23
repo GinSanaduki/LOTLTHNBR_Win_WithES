@@ -28,10 +28,12 @@
 
 @include "AWKScripts/02_INTEGRITY_MONITORING/02_CommonParts/01_Konzertouverture.awk";
 
+@include "AWKScripts/02_INTEGRITY_MONITORING/02_CommonParts/01_Konzertouverture_02.awk";
+
 # ------------------------------------------------------------------------------------------------------------------------
 
 BEGIN{
-	Konzertouverture();
+	Konzertouverture_02();
 	Allegro_Hashconf_02_RetCode = Allegro_Hashconf_02();
 	print Allegro_Hashconf_02_RetCode > Tmp_RetCode_HASH;
 }

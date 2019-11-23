@@ -1,5 +1,6 @@
 #! /usr/bin/gawk
-# 01_Konzert_fur_Klavier_und_Orchester_Nr27_B_Dur_K595.awk
+# 05_Allegro_Rondo_SubSystem_02.awk
+# gawk.exe -f AWKScripts/02_INTEGRITY_MONITORING/03_SubSystem/05_Allegro_Rondo_SubSystem_02.awk INTEGRITY_MONITORING_WORKS/Tmp_RetCode_UTF8.txt
 
 # ------------------------------------------------------------------------------------------------------------------------
 
@@ -25,29 +26,23 @@
 # https://frippery.org/files/busybox/busybox_glob.exe
 
 # ------------------------------------------------------------------------------------------------------------------------
-@include "AWKScripts/01_UPDATE/02_CommonParts/01_Konzertouverture.awk";
-@include "AWKScripts/01_UPDATE/02_CommonParts/04_FileUtils.awk";
-
-@include "AWKScripts/02_INTEGRITY_MONITORING/02_CommonParts/01_Konzertouverture.awk";
-@include "AWKScripts/02_INTEGRITY_MONITORING/02_CommonParts/02_Allegro.awk";
-@include "AWKScripts/02_INTEGRITY_MONITORING/02_CommonParts/15_Larghetto.awk";
-
-# ------------------------------------------------------------------------------------------------------------------------
 
 BEGIN{
-	print "Konzert fur Klavier und Orchester Nr.27 B-Dur K.595 will commence shortly.";
-	print "START Konzertouverture_02...";
-	Konzertouverture_02();
-	print "END Konzertouverture_02.";
-	print "START Allegro...";
-	Klavier_RetCode_01 = Allegro();
-	print "END Allegro.";
-	if(Klavier_RetCode_01 != 0){
-		exit 0;
+	FS = ",";
+}
+
+(FNR == 1){
+	HashValue = $3;
+	print > "INTEGRITY_MONITORING_WORKS/Tmp_Extracted_UTF8.txt";
+	next;
+}
+
+{
+	if(HashValue == $3){
+		print >> "INTEGRITY_MONITORING_WORKS/Tmp_Extracted_Other.txt";
+		next;
 	}
-	print "START Larghetto...";
-	Larghetto();
-	print "END Larghetto.";
-	print "That's all, folks...";
+	HashValue = $3;
+	print > "INTEGRITY_MONITORING_WORKS/Tmp_Extracted_UTF8.txt";
 }
 

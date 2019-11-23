@@ -1,5 +1,6 @@
 #! /usr/bin/gawk
-# 01_Konzert_fur_Klavier_und_Orchester_Nr27_B_Dur_K595.awk
+# 04_Allegro_Rondo_SubSystem_01.awk
+# gawk.exe -f AWKScripts/02_INTEGRITY_MONITORING/03_SubSystem/04_Allegro_Rondo_SubSystem_01.awk HashConf/HashInfo_2*.def
 
 # ------------------------------------------------------------------------------------------------------------------------
 
@@ -25,29 +26,13 @@
 # https://frippery.org/files/busybox/busybox_glob.exe
 
 # ------------------------------------------------------------------------------------------------------------------------
-@include "AWKScripts/01_UPDATE/02_CommonParts/01_Konzertouverture.awk";
-@include "AWKScripts/01_UPDATE/02_CommonParts/04_FileUtils.awk";
 
-@include "AWKScripts/02_INTEGRITY_MONITORING/02_CommonParts/01_Konzertouverture.awk";
-@include "AWKScripts/02_INTEGRITY_MONITORING/02_CommonParts/02_Allegro.awk";
-@include "AWKScripts/02_INTEGRITY_MONITORING/02_CommonParts/15_Larghetto.awk";
+BEGINFILE{
+	FName = FILENAME;
+	YYYYMMDD = substr(FName,19,8);
+}
 
-# ------------------------------------------------------------------------------------------------------------------------
-
-BEGIN{
-	print "Konzert fur Klavier und Orchester Nr.27 B-Dur K.595 will commence shortly.";
-	print "START Konzertouverture_02...";
-	Konzertouverture_02();
-	print "END Konzertouverture_02.";
-	print "START Allegro...";
-	Klavier_RetCode_01 = Allegro();
-	print "END Allegro.";
-	if(Klavier_RetCode_01 != 0){
-		exit 0;
-	}
-	print "START Larghetto...";
-	Larghetto();
-	print "END Larghetto.";
-	print "That's all, folks...";
+{
+	print FName","YYYYMMDD","$0;
 }
 

@@ -26,15 +26,17 @@
 
 # ------------------------------------------------------------------------------------------------------------------------
 
-function Konzertouverture(){
+function Konzertouverture_02(){
 	Declaration();
+	# UPDATEベースのDeclarationの差分
+	Declaration_02();
 	# 作業ディレクトリのリセット
 	MDRM(WorksDir);
 }
 
 # ------------------------------------------------------------------------------------------------------------------------
 
-function Declaration(){
+function Declaration_02(){
 	DIR_HTML_UTF8 = "AcquiredHTML_UTF8";
 	DIR_HTML_SJIS = "AcquiredHTML_ShiftJIS";
 	DIR_HTML_EDIT = "EditedHTML";
@@ -74,52 +76,21 @@ function Declaration(){
 	GetRetCode_XLSX = CALL_BUSYBOX" cat "Tmp_RetCode_XLSX;
 	GetRetCode_CSV = CALL_BUSYBOX" cat "Tmp_RetCode_CSV;
 	GetRetCode_HASH = CALL_BUSYBOX" cat "Tmp_RetCode_HASH;
-}
-
-# ------------------------------------------------------------------------------------------------------------------------
-
-function ExecCmd(CMDTEXT){
-	system(CMDTEXT);
-	close(CMDTEXT);
-}
-
-# ------------------------------------------------------------------------------------------------------------------------
-
-function RetExecCmd(CMDTEXT){
-	RETVAL = system(CMDTEXT);
-	close(CMDTEXT);
-	return RETVAL;
-}
-
-# ------------------------------------------------------------------------------------------------------------------------
-
-function RetTextExecCmd(CMDTEXT){
-	while(CMDTEXT | getline RetTextExecCmdEsc){
-		break;
-	}
-	close(CMDTEXT);
-	return RetTextExecCmdEsc;
-}
-
-# ------------------------------------------------------------------------------------------------------------------------
-
-function MD(DIR_MD){
-	CMD_MD = CALL_BUSYBOX" mkdir -p \""DIR_MD"\" > "OUT_DEVNULL;
-	ExecCmd(CMD_MD);
-}
-
-# ------------------------------------------------------------------------------------------------------------------------
-
-function RM(DIR_RM){
-	CMD_RM = CALL_BUSYBOX" rm -r \""DIR_RM"\" > "OUT_DEVNULL;
-	ExecCmd(CMD_RM);
-}
-
-# ------------------------------------------------------------------------------------------------------------------------
-
-function MDRM(DIR_MDRM){
-	RM(DIR_MDRM);
-	MD(DIR_MDRM);
+	CheckFile_UTF8 = "AcquiredHTML_UTF8/List_of_license_numbers_that_have_not_returned_a_teachers_license_";
+	CheckFile_SJIS = "AcquiredHTML_ShiftJIS/List_of_license_numbers_that_have_not_returned_a_teachers_license_";
+	CheckFile_EDIT = "EditedHTML/List_of_license_numbers_that_have_not_returned_a_teachers_license_";
+	CheckFile_XLSX = "AcquiredXLSX/Acquisition_";
+	CheckFile_CSV = "DefineCSV/Define_Gene_";
+	GENE_EXECSHELL_02 = "EXECSHELL_02.sh";
+	EXEC_SHELL_02 = CALL_BUSYBOX" sh \""GENE_EXECSHELL_02"\"";
+	RM_SHELL_02 = CALL_BUSYBOX" rm \""GENE_EXECSHELL_02"\" > "OUT_DEVNULL;
+	Tmp_Extracted_UTF8 = WorksDir"/Tmp_Extracted_UTF8.txt";
+	Tmp_Extracted_SJIS = WorksDir"/Tmp_Extracted_SJIS.txt";
+	Tmp_Extracted_EDIT = WorksDir"/Tmp_Extracted_EDIT.txt";
+	Tmp_Extracted_XLSX = WorksDir"/Tmp_Extracted_XLSX.txt";
+	Tmp_Extracted_CSV = WorksDir"/Tmp_Extracted_CSV.txt";
+	Tmp_Extracted_HASH = WorksDir"/Tmp_Extracted_HASH.txt";
+	Tmp_Extracted_Other = WorksDir"/Tmp_Extracted_Other.txt";
 }
 
 # ------------------------------------------------------------------------------------------------------------------------
