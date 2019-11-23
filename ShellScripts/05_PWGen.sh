@@ -1,5 +1,8 @@
-#! /bin/sh
-# 02_CALL_INTEGRITY_MONITORING.sh
+#!/bin/sh
+# 05_PWGen.sh
+
+# GinSanaduki/PWGen_IMitation_forBusybox.sh
+# https://github.com/GinSanaduki/PWGen_IMitation_forBusybox.sh
 
 # ------------------------------------------------------------------------------------------------------------------------
 
@@ -26,13 +29,48 @@
 
 # ------------------------------------------------------------------------------------------------------------------------
 
-#LinuxTools/gawk.exe -f AWKScripts/02_INTEGRITY_MONITORING/01_Controller/01_Konzert_fur_Klavier_und_Orchester_Nr27_B_Dur_K595.awk
-#RetVal=$?
-#if [ $RetVal -eq 0 ]; then
-#	exit 0
-#fi
-#
-LinuxTools/gawk.exe -f AWKScripts/02_INTEGRITY_MONITORING/01_Controller/02_Konzert_fur_Klavier_und_Orchester_Nr27_B_Dur_K595_DEUX.awk
+LF=$(printf '\\\n_')
+LF=${LF%_}
 
-exit 0
+genRand () {
+	usleep 1000
+	(ps -Ao user,group,comm,args,pid,ppid,etime,time;date) | \
+	od -t d4 -A n -v | \
+	sed 's/[^0-9]\{1,\}/'"$LF"'/g' | \
+	grep '[0-9]' | \
+	tail -n 42 | \
+	sed 's/.*\(.\{8\}\)$/\1/g' | \
+	awk 'BEGIN{a=-2147483648;}{a+=$1;}END{srand(a);print rand();}'
+	
+}
+
+Rand1=`genRand`
+Rand2=`genRand`
+Rand3=`genRand`
+Rand4=`genRand`
+Rand5=`genRand`
+
+printf "%s\n%s\n%s\n%s\n%s" $Rand1 $Rand2 $Rand3 $Rand4 $Rand5 | \
+tr -dc 'a-zA-Z0-9' | \
+shuf | \
+tr -d '\n' | \
+sha512sum | \
+tr -dc 'a-zA-Z0-9' | \
+awk '{for(i=1;i < length($0);i++){print substr($0,i,1)}}' | \
+shuf | \
+shuf | \
+shuf | \
+shuf | \
+shuf | \
+shuf | \
+shuf | \
+shuf | \
+shuf | \
+shuf | \
+shuf | \
+shuf | \
+shuf | \
+shuf | \
+tr -d '\n' | \
+cut -b 1-13
 
