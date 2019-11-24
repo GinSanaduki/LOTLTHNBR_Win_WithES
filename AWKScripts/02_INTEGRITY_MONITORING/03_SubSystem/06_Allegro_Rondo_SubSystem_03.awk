@@ -1,5 +1,6 @@
-#! /bin/sh
-# 02_CALL_INTEGRITY_MONITORING.sh
+#! /usr/bin/gawk
+# 06_Allegro_Rondo_SubSystem_03.awk
+# gawk.exe -f AWKScripts/02_INTEGRITY_MONITORING/03_SubSystem/06_Allegro_Rondo_SubSystem_03.awk INTEGRITY_MONITORING_WORKS/Tmp_Extracted_Other.txt
 
 # ------------------------------------------------------------------------------------------------------------------------
 
@@ -26,13 +27,22 @@
 
 # ------------------------------------------------------------------------------------------------------------------------
 
-LinuxTools/gawk.exe -f AWKScripts/02_INTEGRITY_MONITORING/01_Controller/01_Konzert_fur_Klavier_und_Orchester_Nr27_B_Dur_K595.awk
-RetVal=$?
-if [ $RetVal == "0" ]; then
-	exit 0
-fi
+@include "AWKScripts/02_INTEGRITY_MONITORING/02_CommonParts/01_Konzertouverture.awk";
 
-LinuxTools/gawk.exe -f AWKScripts/02_INTEGRITY_MONITORING/01_Controller/02_Konzert_fur_Klavier_und_Orchester_Nr27_B_Dur_K595_DEUX.awk
+BEGIN{
+	FS = ",";
+	Declaration_02();
+}
 
-exit 0
+BEGINFILE{
+	if(FILENAME != Tmp_Extracted_Other){
+		exit 99;
+	}
+}
+
+{
+	CMD = CALL_BUSYBOX" rm \""$3"\" > "OUT_DEVNULL;
+	system(CMD);
+	close(CMD);
+}
 

@@ -26,9 +26,8 @@
 
 # ------------------------------------------------------------------------------------------------------------------------
 
+@include "AWKScripts/01_UPDATE/02_CommonParts/01_Konzertouverture.awk";
 @include "AWKScripts/02_INTEGRITY_MONITORING/02_CommonParts/01_Konzertouverture.awk";
-
-@include "AWKScripts/02_INTEGRITY_MONITORING/02_CommonParts/01_Konzertouverture_02.awk";
 
 # ------------------------------------------------------------------------------------------------------------------------
 

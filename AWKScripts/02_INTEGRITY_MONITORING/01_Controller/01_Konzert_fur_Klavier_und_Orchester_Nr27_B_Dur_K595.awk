@@ -43,11 +43,13 @@ BEGIN{
 	Klavier_RetCode_01 = Allegro();
 	print "END Allegro.";
 	if(Klavier_RetCode_01 != 0){
+		print "That's all, folks...";
 		exit 0;
 	}
 	print "START Larghetto...";
 	Larghetto();
 	print "END Larghetto.";
+	RM(WorksDir);
 	print "That's all, folks...";
 }
 

@@ -1,6 +1,6 @@
 #! /usr/bin/gawk
 # 05_Allegro_Rondo_SubSystem_02.awk
-# gawk.exe -f AWKScripts/02_INTEGRITY_MONITORING/03_SubSystem/05_Allegro_Rondo_SubSystem_02.awk INTEGRITY_MONITORING_WORKS/Tmp_RetCode_UTF8.txt
+# gawk.exe -f AWKScripts/02_INTEGRITY_MONITORING/03_SubSystem/05_Allegro_Rondo_SubSystem_02.awk INTEGRITY_MONITORING_WORKS/Tmp_RetCode_UTF8.txt INTEGRITY_MONITORING_WORKS/Tmp_RetCode_SJIS.txt INTEGRITY_MONITORING_WORKS/Tmp_RetCode_EDIT.txt INTEGRITY_MONITORING_WORKS/Tmp_RetCode_XLSX.txt INTEGRITY_MONITORING_WORKS/Tmp_RetCode_CSV.txt
 
 # ------------------------------------------------------------------------------------------------------------------------
 
@@ -27,22 +27,45 @@
 
 # ------------------------------------------------------------------------------------------------------------------------
 
+@include "AWKScripts/02_INTEGRITY_MONITORING/02_CommonParts/01_Konzertouverture.awk";
+
 BEGIN{
 	FS = ",";
+	Declaration_02();
+}
+
+BEGINFILE{
+	Fname = FILENAME;
 }
 
 (FNR == 1){
-	HashValue = $3;
-	print > "INTEGRITY_MONITORING_WORKS/Tmp_Extracted_UTF8.txt";
+	HashValue = $4;
+	Main();
 	next;
 }
 
 {
-	if(HashValue == $3){
-		print >> "INTEGRITY_MONITORING_WORKS/Tmp_Extracted_Other.txt";
+	if(HashValue == $4){
+		print > Tmp_Extracted_Other;
 		next;
 	}
-	HashValue = $3;
-	print > "INTEGRITY_MONITORING_WORKS/Tmp_Extracted_UTF8.txt";
+	HashValue = $4;
+	Main();
+}
+
+function Main(){
+	if(Fname == Tmp_RetCode_UTF8){
+		print > Tmp_Extracted_UTF8;
+	} else if(Fname == Tmp_RetCode_SJIS){
+		print > Tmp_Extracted_SJIS;
+	} else if(Fname == Tmp_RetCode_EDIT){
+		print > Tmp_Extracted_EDIT;
+	} else if(Fname == Tmp_RetCode_XLSX){
+		print > Tmp_Extracted_XLSX;
+	} else if(Fname == Tmp_RetCode_CSV){
+		print > Tmp_Extracted_CSV;
+	} else {
+		exit 99;
+	}
 }
 
