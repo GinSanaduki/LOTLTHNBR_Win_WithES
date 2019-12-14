@@ -10,7 +10,7 @@ LOTLTHNBR Scripts provides a function to obtain a list of non-returned license n
 This Scripts needs GAWK(the GNU implementation of the AWK programming language) version 4.0 or later and BusyBox developed by Erik Andersen, Rob Landley, Denys Vlasenko and others.  
 
 文部科学省の公開している未返納教員免許状一覧からデータを取得し免許番号の照会を行います。
-担任の教職員にに教員免許状を確認すれば、教育委員会の採用担当に限らず、保護者の方でも確認を行うことができます。
+担任の教職員に教員免許状を確認すれば、教育委員会の採用担当に限らず、保護者の方でも確認を行うことができます。
 
 LOTLTHNBRはGAWK、busyboxのバイナリで動作します。
 
