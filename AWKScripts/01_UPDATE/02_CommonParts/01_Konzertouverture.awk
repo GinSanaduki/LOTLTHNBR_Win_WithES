@@ -34,7 +34,7 @@ function Konzertouverture(){
 # ------------------------------------------------------------------------------------------------------------------------
 
 function Declaration(){
-	MEXT_URL = "http://www.mext.go.jp/a_menu/shotou/kyoin/1342205.htm";
+	MEXT_URL = "https://www.mext.go.jp/a_menu/shotou/kyoin/1342205.htm";
 	# HTML_FILENAME = "未返納教員免許状一覧_文部科学省_"strftime("%Y%m%d",systime())".txt";
 	# 正規表現の関係上、利便性の高い文字列に変更
 	HTML_FILENAME = "List_of_license_numbers_that_have_not_returned_a_teachers_license_"strftime("%Y%m%d",systime())".txt";
