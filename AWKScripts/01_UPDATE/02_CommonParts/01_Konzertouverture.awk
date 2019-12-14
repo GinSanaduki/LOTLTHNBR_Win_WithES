@@ -50,7 +50,7 @@ function Declaration(){
 	FNAME_HASH = DIR_HASHCONF"/HashInfo_"strftime("%Y%m%d",systime())".def";
 	KEYWORD_01 = "返納が必要であるにもかかわらず返納されていない教員免許状一覧";
 	KEYWORD_02 = "<a href=\\\"\\/a_menu\\/shotou\\/kyoin\\/__icsFiles\\/afieldfile\\/2[0-9][0-9][0-9]\\/[0-1][0-9]\\/[0-3][0-9]\\/.+\\.xlsx";
-	KEYWORD_03 = substr(MEXT_URL,1,21);
+	KEYWORD_03 = substr(MEXT_URL,1,22);
 	KEYWORD_04 = "全都道府県";
 	KEYWORD_05 = "↑↑";
 	KEYWORD_06 = "OuterJoined.csv";
