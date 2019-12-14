@@ -17,3 +17,32 @@ GAWK、busyboxのバイナリで動作します。
 
 https://github.com/GinSanaduki/LOTLTHNBR_Win_WithES/releases/download/v1.0.0/LOTLTHNBR_Win_WithES.zip
 
+GAWK 5.0.1 Download ezwinports from SourceForge.net
+
+https://sourceforge.net/projects/ezwinports/files/gawk-5.0.1-w32-bin.zip/download
+
+BusyBox Official
+
+https://www.busybox.net/
+
+BusyBox -w32
+http://frippery.org/busybox/
+
+Download
+
+http://frippery.org/files/busybox/busybox.exe
+
+BusyBox Wildcard expansion
+
+https://frippery.org/busybox/globbing.html
+
+Download
+
+https://frippery.org/files/busybox/busybox_glob.exe
+
+nkf32 developed by Itaru Ichikawa and others.
+
+Download
+
+https://www.vector.co.jp/soft/win95/util/se295331.html
+
